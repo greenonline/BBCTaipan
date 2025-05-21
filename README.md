@@ -1,6 +1,16 @@
 # BBCTaipan
+
 An BBC BASIC port of the classic Apple II game, Taipan...
 
+## Caveats
+
+ - This code is still a WIP, not finished.
+ - Multiple versions of line numbers may exist, with the latter line being the preferred version (to date)...
+ - The code can be pasted into emulators such as BeebEm5. Any duplicate line numbers get resolved by the last version of the duplicate line numbers being accepted as the final verison.
+ - There may be graphic corruption with the animations (of battles)
+ - I have not figured out how to create *inverse text*, so the "look" differs slightly from that of the AppleSoft BASIC version
+
+The code runs and is playable though.
 
 ## See also
 
