@@ -11,3 +11,4 @@ An BBC BASIC port of the classic Apple II game, Taipan...
  - [!!!NOT!!! TRS80Taipan](https://github.com/greenonline/TRS80Taipan)
  - [MMBASICTaipan](https://github.com/greenonline/MMBASICTaipan)
  - [MacTaipan](https://github.com/greenonline/MacTaipan)
+ - [Taipan_40_Column_Apple_II](https://github.com/greenonline/Taipan_40_Column_Apple_II)
