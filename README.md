@@ -2,6 +2,8 @@
 
 An BBC BASIC port of the classic Apple II game, Taipan...
 
+The Applesoft BASIC code from the book,  [TAIPAN - A historical adventure for the Apple Computer (PDF)][1] by *Art Canfil*, *Karl Albrecht*, and *Jim McClenahan*, linked to from [taipangame.com][2].
+
 ## Caveats
 
  - This code is still a WIP, not finished.
