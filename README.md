@@ -14,6 +14,10 @@ The Applesoft BASIC code from the book,  [TAIPAN - A historical adventure for th
 
 The code runs and is playable though.
 
+## Known issues
+
+ - A lack of inverse characters, resulting in a lack of table delimiting decorations.
+
 ## See also
 
  - [Taipan for BBC BASIC](https://gr33nonline.wordpress.com/2023/12/12/taipan-for-bbc-basic/)
