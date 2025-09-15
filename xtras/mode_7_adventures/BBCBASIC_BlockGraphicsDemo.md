@@ -768,16 +768,20 @@ From page 50, BBC User Guide.
 
 [![BBCTaipan_MODE7_MODE5Example][966]][966]
 
-The text in `MODE 5` is awful, barely useable. `MODE 4` (and 1 and 6) has text more like (but not the same) `MODE 7` – Modes 1 (40x32), 4 (40x32) and 6 (40x25) are the only 40 column modes, apart from `MODE 7` (40x25). MODE 6 looks more clunky. Apple II resolution is 40x24, so most similar to the more clunky looking `MODE 6` (and prettier `MODE 7`).
+As can be seen in the above image, the text in `MODE 5` is awful, barely useable. `MODE 4` (and 1 and 6) has text more similar to (but not the same as) `MODE 7` – Modes 1 (40x32), 4 (40x32) and 6 (40x25) are the only 40 column modes, apart from `MODE 7` (40x25). MODE 6 looks more clunky. The Apple II resolution is 40x24, which is most similar to the more clunky looking `MODE 6` (and prettier `MODE 7`).
 
 See [BBC BASIC for SDL 2.0 - BBC BASIC for Windows - Graphics and Colours](https://www.bbcbasic.co.uk/bbcwin/manual/bbcwin3.html) for the list of resolutions.
 
 ### Equivalents of `NORMAL` and `INVERSE`
 
+For modes 1-6:
+
  - White Text/Black Background: `COLOUR 3: COLOUR 128`
- - Black Text/White Background: `COLOUR 0: COLOUR 131`  ---- inverse
+ - Black Text/White Background: `COLOUR 0: COLOUR 131`  <---- inverse
 
 ### The shopping list MRE
+
+#### In `MODE 4`
 
 ```none
 5 MODE 4: REM MODE 1, 4 or 6
@@ -831,9 +835,18 @@ or just not changing line 20, and centering the heading along with padding space
 
 [![BBCTaipan_MODE7_BBCMREShoppingList_MODE4_Center][969]][969]
 
-The text font of `MODE 4` is rather clunky, as does `MODE1` (there is no diserible difference really between the font of modes 1 and 4), and `MODE 6` is even more "*clunkier looking*" still, when compared to the font used in `MODE 7` – even though the 40x25 character resolution of `MODE 6` (and `MODE 7`) more closely matches the screen resolution of the Apple II, which is 40x24.
+The text font of `MODE 4` looks rather clunky, as does `MODE1` (there is no diserible difference really between the font of modes 1 and 4), and `MODE 6` is even more "*clunkier looking*" still, when compared to the font used in `MODE 7` – even though the 40x25 character resolution of `MODE 6` (and `MODE 7`) more closely matches the screen resolution of the Apple II, which is 40x24.
 
 See [BBC BASIC for SDL 2.0 - BBC BASIC for Windows - Graphics and Colours](https://www.bbcbasic.co.uk/bbcwin/manual/bbcwin3.html) for the list of resolutions.
+
+#### In `MODE 1`
+
+[![BBCTaipan_MODE7_BBCMREShoppingList_MODE1_Center][970]][970]
+
+
+#### In `MODE 6`
+
+[![BBCTaipan_MODE7_BBCMREShoppingList_MODE6_Center][971]][971]
 
 ### Splash screen
 
@@ -1059,7 +1072,9 @@ This is the end, my friend
   [967]: mode7images/BBCTaipan_MODE7_BBCMREShoppingList_MODE4.png
   [968]: mode7images/BBCTaipan_MODE7_BBCMREShoppingList_MODE4_Overlay.png
   [969]: mode7images/BBCTaipan_MODE7_BBCMREShoppingList_MODE4_Center.png
-  [970]: mode7images/BBCTaipan_MODE7_MODE6_DIM.png
+  [970]: mode7images/BBCTaipan_MODE7_BBCMREShoppingList_MODE1_Center.png
+  [971]: mode7images/BBCTaipan_MODE7_BBCMREShoppingList_MODE6_Center.png
+  [972]: mode7images/BBCTaipan_MODE7_MODE6_DIM.png
 
   [1000]: mode7images/BBCTaipan_MODE7_MainScreen_Asymmetrical_GoodsOnlyFixed.png
   [1001]: mode7images/BBCTaipan_MODE7_MainScreen_Asymmetrical_GoodsStatsFixed.png
