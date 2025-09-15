@@ -26,11 +26,11 @@ The code runs and is playable though.
 
 ## Notes
 
-This is a barebones version of Taipan, with no graphics or flashiness whatsoever, to speak of. The reasons (excuses?) why are given in the lengthly notes, [BBCBASIC_BlocGraphicsDemo.md](xtras/mode_7_adventures/BBCBASIC_BlockGraphicsDemo.md).
+This is a barebones version of Taipan, with no graphics or flashiness whatsoever, to speak of. The reasons (excuses?) why are given in the lengthly notes, [BBCBASIC_BlockGraphicsDemo](xtras/mode_7_adventures/BBCBASIC_BlockGraphicsDemo.md).
 
 ### Two files
 
-The file name: The are two files: a clean version (`BBCTAIPAN.BAS`), and a personal notes version (`TAIPAN_BAS_BBC_NORMAL=0_TABBED_OCRfixed.txt`). Both versions work fine when pasted into an emulator, such as BeebEm5. However, if typing it in manaually then the clean version, is the file to use. There are also, *now*, a couple of auto-bootable disk images ([`TAIPAN_80.SSD` and `TAIPAN_40.SSD`](disks/) – referring to the number of tracks, not columns), along with my personal notes in getting a disk to format, save, load and auto-boot, [BBCUsingFloppies.md](xtras/floppy_disk_adventures/BBCUsingFloppies.md).
+The file name: The are two files: a clean version (`BBCTAIPAN.BAS`), and a personal notes version (`TAIPAN_BAS_BBC_NORMAL=0_TABBED_OCRfixed.txt`). Both versions work fine when pasted into an emulator, such as BeebEm5. However, if typing it in manaually then the clean version, is the file to use. There are also, *now*, a couple of auto-bootable disk images ([`TAIPAN_80.SSD` and `TAIPAN_40.SSD`](disks/) – referring to the number of tracks, not columns), along with my personal notes in getting a disk to format, save, load and auto-boot, [BBCUsingFloppies](xtras/floppy_disk_adventures/BBCUsingFloppies.md).
 
 The unsantised version (`TAIPAN_BAS_BBC_NORMAL=0_TABBED_OCRfixed.txt`) contains personal notes and duplicate lines, where minor changes have been necessary and various attempts tried. The *last* occurence of any duplicate line(s) will be the final "working" version of the line. It might not be the next successive line either – it *might* be in a repeated *group of lines* further doen the source code. This format works perfectly when entering (i.e. pasting) the code into an emulator (such as BeebEm) as only the *last entered version* of the line is accepted – much like when one types code in manually.
 
