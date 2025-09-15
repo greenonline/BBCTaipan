@@ -54,7 +54,9 @@ Or you could replace `CHR$(133)` with `CHR$(124)`, which is a thin vertical bar.
 
 For more information, see [Looking for an accurate Apple II(e) character set - in particular, what is CHR$(133)?][5]
 
-From [this answer](https://retrocomputing.stackexchange.com/a/28132/202) to [Looking for an accurate Apple II\(e\) character set - in particular, what is CHR\$\(133\)?](https://retrocomputing.stackexchange.com/q/28127/202), the accurate character would be the left vertical half bar `CHR$(181)`, not `CHR$(234)`, the right vertical half bar. The graphics *sixels* characters can be seen [here](https://www.bbcbasic.co.uk/bbcwin/manual/bbcwinh.html).
+From [this answer](https://retrocomputing.stackexchange.com/a/28132/202) to [Looking for an accurate Apple II\(e\) character set - in particular, what is CHR\$\(133\)?](https://retrocomputing.stackexchange.com/q/28127/202), the accurate character would be the left vertical half bar `CHR$(181)`, not the right vertical half bar `CHR$(234)`. The graphics *sixels* characters can be seen [here](https://www.bbcbasic.co.uk/bbcwin/manual/bbcwinh.html):
+
+[![Mode 7 sixels](xtras/images/MODE_7_Sixels.png)
 
 ## See also
 
