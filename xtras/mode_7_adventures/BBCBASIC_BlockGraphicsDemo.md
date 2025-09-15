@@ -862,9 +862,11 @@ However, another issue becomes painfully apparent, as soon as the `MODE` change,
 22 SPEED = 255:COLOUR 0: COLOUR 131:PRINT TAB(0,14); A$:COLOUR 3: COLOUR 128
 ```
 
-[![BBCTaipan_MODE7_MODE6_DIM][970]][970]
+[![BBCTaipan_MODE7_MODE6_DIM][972]][972]
 
-Using `MODE 6` results in a `DIM space at line 30` error. Not enough memory! Both `MODE 1` and `MODE 4` give `Bad MODE` error. 
+Using `MODE 6` results in a `DIM space at line 30` error. Not enough memory! 
+
+Both `MODE 1` and `MODE 4` give `Bad MODE` error. 
 
 [![BBCTaipan_MODE7_MODE1_BadMODE][973]][973]
 
