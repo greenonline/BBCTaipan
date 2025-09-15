@@ -864,7 +864,11 @@ However, another issue becomes painfully apparent, as soon as the `MODE` change,
 
 [![BBCTaipan_MODE7_MODE6_DIM][970]][970]
 
-Using `MODE 6` results in a `DIM space at line 30` error. Not enough memory! Both `MODE 1` and `MODE 4` give `Bad MODE` error. However, `MODE 6` uses the same amount of memory as `MODE 7`, which is 8 kB (as does `MODE 4`, whereas `MODE 1` uses 16 kB).
+Using `MODE 6` results in a `DIM space at line 30` error. Not enough memory! Both `MODE 1` and `MODE 4` give `Bad MODE` error. 
+
+[![BBCTaipan_MODE7_MODE1_BadMODE][973]][973]
+
+However, `MODE 6` uses the same amount of memory as `MODE 7`, which is 8 kB (as does `MODE 4`, whereas `MODE 1` uses 16 kB).
 
 From [BBC BASIC memory usage](https://stardot.org.uk/forums/viewtopic.php?t=10309), `PRINT HIMEM-LOMEM` gives 9583, upon reset and loading from disk and 8559 after running the game.
 
@@ -1075,6 +1079,8 @@ This is the end, my friend
   [970]: mode7images/BBCTaipan_MODE7_BBCMREShoppingList_MODE1_Center.png
   [971]: mode7images/BBCTaipan_MODE7_BBCMREShoppingList_MODE6_Center.png
   [972]: mode7images/BBCTaipan_MODE7_MODE6_DIM.png
+  [973]: mode7images/BBCTaipan_MODE7_MODE1_BadMODE.png
+
 
   [1000]: mode7images/BBCTaipan_MODE7_MainScreen_Asymmetrical_GoodsOnlyFixed.png
   [1001]: mode7images/BBCTaipan_MODE7_MainScreen_Asymmetrical_GoodsStatsFixed.png
