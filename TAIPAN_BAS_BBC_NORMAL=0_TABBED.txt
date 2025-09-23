@@ -95,6 +95,7 @@
 261 IF X$ = "S" THEN X1 = 1
 262 IF X$ = "A" THEN X1 = 3 
 263 IF X$ = "P" THEN X1 = 4 
+264 IF X$ = "T" THEN X1 = 2 
 265 IF X$ = "R" THEN X1 = 5
 266 IF X$ <> "O" AND X$ <> "S" AND X$ <> "T" AND X$ <>"A" AND X$ <> "P" AND X$ <> "R" THEN GOSUB 770:GOTO 260
 270 RETURN
