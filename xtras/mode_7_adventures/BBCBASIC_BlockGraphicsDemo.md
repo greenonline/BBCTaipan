@@ -1164,6 +1164,8 @@ Lender, Temple, Stats
 
 ##### By prefix control string
 
+Note that this patch depends upon a control character string variable, which the black and white examples above do not use. The concept of the control character string variable was developed *much* later, after developing the colour interface (see **New Changes** near the bottom). However, it bears relevance here, due to the indentation (that is now not necessary), hence its inclusion in this section.
+
 Lender, Temple, Stats.
 
 Note the addtion of line 230, the market menu, which was original indented anyway, has had the indent remove (and the preceding space in the string)
@@ -1281,7 +1283,7 @@ Need to also shift right the second column to make room for the names of the goo
 
 [![BBCTaipan_MODE7_IndentedTableEnds_GoodsLR][1026]][1026]
 
-It would be good to get the right hand edge of the column headers as a block, after `GODOWN"`:
+It would be good to get the right hand edge of the column headers as a block, after `GODOWN`:
 
 ```none
 141 P. TAB(0,3); CHR$151;:FOR N=1 TO 39: P. CHR$255;: NEXT N:PRINT TAB(0,3);CHR$151;CHR$255;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN";CHR$255
@@ -1877,6 +1879,178 @@ Shifting over the bars right by one, due to the removed redundant control charac
 
 Personally, I think this looks better, if not the best.  Way better than the black and white as it is less "jarring", as it has actual *inverse* characters.
 
+
+
+### Complete colour patch for goods table and market prices
+
+With first line empty (as per Apple II)
+
+#### Without center bar
+
+##### Hardcoded colours
+
+```none
+141 PRINT TAB(0,3);CHR$147;CHR$(157);CHR$(148);"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
+
+150 FORI=0TO5:P.TAB(0,4+I);CHR$147;CHR$181:P.TAB(2,4+I);CHR$135;G$(I):P.TAB(9,4+I);CHR$147;CHR$181;CHR$135:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
+151 P.TAB(22,4+I);CHR$147;CHR$181;CHR$135:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I);CHR$147;CHR$234:NEXTI
+152 P.TAB(0,10);CHR$147;CHR$(157);CHR$(132);A$:RETURN
+
+220 GOSUB 790: GOSUB 1340: P.TAB(0,10);CHR$147;CHR$(157);CHR$(148);TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)CHR$147;CHR$181;CHR$135;G$(I);: P.TAB(8)CHR$135:P.TAB(9,12+I/2)GP(I);:P.TAB(20,12+I/2);G$(I + 1);
+221 PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2);CHR$147;CHR$234:NEXT I
+222 P.TAB(0,15);CHR$147;CHR$(157);CHR$(132);A$
+223 PRINT TAB(0,11);CHR$147;CHR$181: PRINT TAB(38,11);CHR$147;CHR$234
+```
+
+##### Adjustable
+
+Key - set in lines 7 and 8
+
+```none
+FG=132 CHR$(132) -> CHR$FG    - Foreground graphics colour
+FT=148 CHR$(148) -> CHR$FT    - Foreground text colour
+BG=147 CHR$147   -> CHR$BG    - Background colour
+BK=157 CHR$(157) -> CHR$BK    - Background control (Do NOT change!)
+GC=135 CHR$135   -> CHR$GC    - Goods colour (white)
+LB=181 CHR$181 -> CHR$LB      - Left half block
+RB=234 CHR$234 -> CHR$RB      - Right half block
+FB=255 CHR$255 -> CHR$FB      - Full block
+```
+
+Code
+
+```none
+7 FG=132:FT=148:BG=147:GC=135 : REM COLOUR VARIABLES
+8 BK=157:LB=181:RB=234:FB=255: REM COLOUR CONSTANTS - DO NOT CHANGE
+141 PRINT TAB(0,3);CHR$BG;CHR$BK;CHR$FT;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
+
+150 FORI=0TO5:P.TAB(0,4+I);CHR$BG;CHR$LB:P.TAB(2,4+I);CHR$GC;G$(I):P.TAB(9,4+I);CHR$BG;CHR$LB;CHR$GC:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
+151 P.TAB(22,4+I);CHR$BG;CHR$LB;CHR$GC:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I);CHR$BG;CHR$RB:NEXTI
+152 P.TAB(0,10);CHR$BG;CHR$BK;CHR$FG;A$:RETURN
+
+220 GOSUB 790: GOSUB 1340: P.TAB(0,10);CHR$BG;CHR$BK;CHR$FT;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)CHR$BG;CHR$LB;CHR$GC;G$(I);: P.TAB(8)CHR$GC:P.TAB(9,12+I/2)GP(I);:P.TAB(20,12+I/2);G$(I + 1);
+221 PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2);CHR$BG;CHR$RB:NEXT I
+222 P.TAB(0,15);CHR$BG;CHR$BK;CHR$FG;A$
+223 PRINT TAB(0,11);CHR$BG;CHR$LB: PRINT TAB(38,11);CHR$BG;CHR$RB
+```
+
+##### Adjustable - more efficient
+
+Key - set in lines 7 and 8
+
+```none
+FG$= CHR$(132) - Foreground graphics colour
+FT$= CHR$(148) - Foreground text colour
+BG$= CHR$147   - Background colour
+BK$= CHR$(157) - Background control (Do NOT change!)
+GC$= CHR$135   - Goods colour (white)
+LB$= CHR$181   - Left half block
+RB$= CHR$234   - Right half block
+FB$= CHR$255   - Full block
+```
+
+Code
+
+```none
+7 FG$=CHR$132:FT$=CHR$148:BG$=CHR$147:GC$=CHR$135 : REM COLOUR VARIABLES
+8 BK$=CHR$157:LB$=CHR$181:RB$=CHR$234:FB$=CHR$255: REM COLOUR CONSTANTS - DO NOT CHANGE
+141 PRINT TAB(0,3)BG$BK$FT$;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
+
+150 FORI=0TO5:P.TAB(0,4+I)BG$LB$:P.TAB(2,4+I)GC$;G$(I):P.TAB(9,4+I)BG$LB$GC$:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
+151 P.TAB(22,4+I)BG$LB$GC$:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I)BG$RB$:NEXTI
+152 P.TAB(0,10)BG$BK$FG$;A$:RETURN
+
+220 GOSUB 790: GOSUB 1340: P.TAB(0,10)BG$BK$FT$;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)BG$LB$GC$G$(I);: P.TAB(8)GC$:P.TAB(9,12+I/2)GP(I);:P.TAB(20,12+I/2);G$(I + 1);
+221 PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2)BG$RB$:NEXT I
+222 P.TAB(0,15)BG$BK$FG$A$
+223 PRINT TAB(0,11)BG$LB$: PRINT TAB(38,11)BG$RB$
+```
+
+#### With center bar
+
+The printing of `G$(I + 1)` has moved to line 221 for better grouping, with its price, with the added control charaters for the centre bar.
+
+##### Hardcoded colours
+
+```none
+141 PRINT TAB(0,3);CHR$147;CHR$(157);CHR$(148);"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
+
+150 FORI=0TO5:P.TAB(0,4+I);CHR$147;CHR$181:P.TAB(2,4+I);CHR$135;G$(I):P.TAB(9,4+I);CHR$147;CHR$181;CHR$135:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
+151 P.TAB(22,4+I);CHR$147;CHR$181;CHR$135:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I);CHR$147;CHR$234:NEXTI
+152 P.TAB(0,10);CHR$147;CHR$(157);CHR$(132);A$:RETURN
+
+220 GOSUB 790: GOSUB 1340: P.TAB(0,10);CHR$147;CHR$(157);CHR$(148);TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)CHR$147;CHR$181;CHR$135;G$(I);: P.TAB(8)CHR$135:P.TAB(9,12+I/2)GP(I);
+221 P.TAB(20,12+I/2)CHR$147;CHR$181;CHR$135;G$(I + 1);:PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2);CHR$147;CHR$234:NEXT I
+222 P.TAB(0,15);CHR$147;CHR$(157);CHR$(132);A$
+223 PRINT TAB(0,11);CHR$147;CHR$181;TAB(21);CHR$181; TAB(39);CHR$234
+```
+
+##### Adjustable
+
+Key - set in lines 7 and 8
+
+```none
+FG=132 CHR$(132) -> CHR$FG    - Foreground graphics colour
+FT=148 CHR$(148) -> CHR$FT    - Foreground text colour
+BG=147 CHR$147   -> CHR$BG    - Background colour
+BK=157 CHR$(157) -> CHR$BK    - Background control (Do NOT change!)
+GC=135 CHR$135   -> CHR$GC    - Goods colour (white)
+LB=181 CHR$181 -> CHR$LB      - Left half block
+RB=234 CHR$234 -> CHR$RB      - Right half block
+FB=255 CHR$255 -> CHR$FB      - Full block
+```
+
+Code
+
+```none
+7 FG=132:FT=148:BG=147:GC=135 : REM COLOUR VARIABLES
+8 BK=157:LB=181:RB=234:FB=255: REM COLOUR CONSTANTS - DO NOT CHANGE
+141 PRINT TAB(0,3);CHR$BG;CHR$BK;CHR$FT;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
+
+150 FORI=0TO5:P.TAB(0,4+I);CHR$BG;CHR$LB:P.TAB(2,4+I);CHR$GC;G$(I):P.TAB(9,4+I);CHR$BG;CHR$LB;CHR$GC:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
+151 P.TAB(22,4+I);CHR$BG;CHR$LB;CHR$GC:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I);CHR$BG;CHR$RB:NEXTI
+152 P.TAB(0,10);CHR$BG;CHR$BK;CHR$FG;A$:RETURN
+
+220 GOSUB 790: GOSUB 1340: P.TAB(0,10);CHR$BG;CHR$BK;CHR$FT;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)CHR$BG;CHR$LB;CHR$GC;G$(I);: P.TAB(8)CHR$GC:P.TAB(9,12+I/2)GP(I);
+221 P.TAB(20,12+I/2)CHR$BG;CHR$LB;CHR$GC;G$(I + 1);:PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2);CHR$BG;CHR$RB:NEXT I
+222 P.TAB(0,15);CHR$BG;CHR$BK;CHR$FG;A$
+223 PRINT TAB(0,11);CHR$BG;CHR$LB;TAB(21);CHR$LB; TAB(39);CHR$RB
+```
+
+##### Adjustable - more efficient
+
+Key - set in lines 7 and 8
+
+```none
+FG$= CHR$(132) - Foreground graphics colour
+FT$= CHR$(148) - Foreground text colour
+BG$= CHR$147   - Background colour
+BK$= CHR$(157) - Background control (Do NOT change!)
+GC$= CHR$135   - Goods colour (white)
+LB$= CHR$181   - Left half block
+RB$= CHR$234   - Right half block
+FB$= CHR$255   - Full block
+```
+
+Code for the goods and market prices tables
+
+```none
+7 FG$=CHR$132:FT$=CHR$148:BG$=CHR$147:GC$=CHR$135 : REM COLOUR VARIABLES
+8 BK$=CHR$157:LB$=CHR$181:RB$=CHR$234:FB$=CHR$255: REM COLOUR CONSTANTS - DO NOT CHANGE
+141 PRINT TAB(0,3)BG$BK$FT$;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
+
+150 FORI=0TO5:P.TAB(0,4+I)BG$LB$:P.TAB(2,4+I);GC$;G$(I):P.TAB(9,4+I)BG$LB$GC$:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
+151 P.TAB(22,4+I)BG$LB$GC$:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I)BG$RB$:NEXTI
+152 P.TAB(0,10)BG$BK$FG$;A$:RETURN
+
+220 GOSUB 790: GOSUB 1340: P.TAB(0,10)BG$BK$FT$;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)BG$LB$GC$;G$(I);: P.TAB(8)GC$:P.TAB(9,12+I/2)GP(I);
+221 P.TAB(20,12+I/2)BG$LB$GC$;G$(I + 1);:PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2)BG$RB$:NEXT I
+222 P.TAB(0,15)BG$BK$FG$;A$
+223 PRINT TAB(0,11)BG$LB$;TAB(21)LB$; TAB(39)RB$
+```
+
+Again, note the additional control characters before `G$(I + 1)`, in line 221, for the center bar.
+
 ## New changes
 
 ### Adjustable colours
@@ -2009,7 +2183,7 @@ Or dispensing with line 9 (from the **Funky Splash screen**), add sharing into t
 8 BK$=CHR$157:LB$=CHR$181:RB$=CHR$234:FB$=CHR$255:LG$=CHR$(141):FLSH$=CHR$(136):STDY$=CHR$(137): REM COLOUR CONSTANTS - DO NOT CHANGE
 ```
 
-However, we could have a more comprehensive list, like this:
+However, we could have a more comprehensive, and legible, list, like this:
 
 ```none
 T_R$=CHR$129
@@ -2020,7 +2194,7 @@ T_M$=CHR$133
 T_C$=CHR$134
 T_W$=CHR$135
 C_FLSH$=CHR$136
-T_STDY$=CHR$137
+C_STDY$=CHR$137
 C_SGL$=CHR$140
 C_DBL$=CHR$141
 G_R$=CHR$145
@@ -2033,11 +2207,12 @@ G_W$=CHR$151
 C_CONCEAL$=CHR$152
 C_CONTIG$=CHR$153
 C_SEP$=CHR$154
-C_BKBKL$=CHR$156
-C_BKNEW$=CHR$157
+C_BGBLK$=CHR$156
+C_BGNEW$=CHR$157
 C_HOLD$=CHR$158
 C_RLSE$=CHR$159
 ```
+
 where
 
 ```none
@@ -2045,31 +2220,92 @@ T_ Alpha
 G_ Graphics
 C_ Control
 ```
-Except that `_` is not valid as a variable name – yes it is! See [Keybard mappings](https://acorn.huininga.nl/pub/software/BeebEm/BeebEm-4.14.68000-20160619/Help/keyboard.html)
 
-In one line
+Except that `_` is not valid as a variable name – yes it is! See [Keybard mappings](https://acorn.huininga.nl/pub/software/BeebEm/BeebEm-4.14.68000-20160619/Help/keyboard.html), and note below.
+
+In one line (too long!)
 
 ```none
-9 T_R$=CHR$129:T_G$=CHR$130:T_Y$=CHR$131:T_B$=CHR$132:T_M$=CHR$133:T_C$=CHR$134:T_W$=CHR$135:C_FLSH$=CHR$136:T_STDY$=CHR$137:C_SGL$=CHR$140:C_DBL$=CHR$141:C_CONCEAL$=CHR$152:C_CONTIG$=CHR$153:C_SEP$=CHR$154:C_BKBKL$=CHR$156:C_BKNEW$=CHR$1<--TOO LONG!57:C_HOLD$=CHR$158:C_RLSE$=CHR$159:G_R$=CHR$145:G_G$=CHR$146:G_Y$=CHR$147:G_B$=CHR$148:G_M$=CHR$149:G_C$=CHR$150:G_W$=CHR$151
+2 T_R$=CHR$129:T_G$=CHR$130:T_Y$=CHR$131:T_B$=CHR$132:T_M$=CHR$133:T_C$=CHR$134:T_W$=CHR$135:C_FLSH$=CHR$136:C_STDY$=CHR$137:C_SGL$=CHR$140:C_DBL$=CHR$141:C_CONCEAL$=CHR$152:C_CONTIG$=CHR$153:C_SEP$=CHR$154:C_BGBLK$=CHR$156:C_BGNEW$=CHR$1<--TOO LONG!57:C_HOLD$=CHR$158:C_RLSE$=CHR$159:G_R$=CHR$145:G_G$=CHR$146:G_Y$=CHR$147:G_B$=CHR$148:G_M$=CHR$149:G_C$=CHR$150:G_W$=CHR$151
 ```
 
-In two lines
+In two lines, which seems the most efficient use of line numbers
 
 ```none
-9 T_R$=CHR$129:T_G$=CHR$130:T_Y$=CHR$131:T_B$=CHR$132:T_M$=CHR$133:T_C$=CHR$134:T_W$=CHR$135:G_R$=CHR$145:G_G$=CHR$146:G_Y$=CHR$147:G_B$=CHR$148:G_M$=CHR$149:G_C$=CHR$150:G_W$=CHR$151
-10 C_FLSH$=CHR$136:T_STDY$=CHR$137:C_SGL$=CHR$140:C_DBL$=CHR$141:C_CONCEAL$=CHR$152:C_CONTIG$=CHR$153:C_SEP$=CHR$154:C_BKBKL$=CHR$156:C_BKNEW$=CHR$157:C_HOLD$=CHR$158:C_RLSE$=CHR$159
-11 
+2 T_R$=CHR$129:T_G$=CHR$130:T_Y$=CHR$131:T_B$=CHR$132:T_M$=CHR$133:T_C$=CHR$134:T_W$=CHR$135:G_R$=CHR$145:G_G$=CHR$146:G_Y$=CHR$147:G_B$=CHR$148:G_M$=CHR$149:G_C$=CHR$150:G_W$=CHR$151: REM COLOUR CHARACTERS
+3 C_FLSH$=CHR$136:C_STDY$=CHR$137:C_SGL$=CHR$140:C_DBL$=CHR$141:C_CONCEAL$=CHR$152:C_CONTIG$=CHR$153:C_SEP$=CHR$154:C_BGBLK$=CHR$156:C_BGNEW$=CHR$157:C_HOLD$=CHR$158:C_RLSE$=CHR$159 : REM CONTROL CHARACTER
 ```
 
-In three lines
+In three lines - not enough line numbers spare, for line 9! Better to use the two line version.
+
+Or, as line 8 becomes redundant later, move line 7 to line 9 (and include the block characters), and use lines 2, 3 and 7
+
+Or, better, move line 7 to line 18 (and include the block characters), and use lines 15-17.
+
+Or, best, move line 7 to line 19, the block characters to line 18, and use lines 15-17.
 
 ```none
-9 T_R$=CHR$129:T_G$=CHR$130:T_Y$=CHR$131:T_B$=CHR$132:T_M$=CHR$133:T_C$=CHR$134:T_W$=CHR$135:REM Alphanumeric
-10 C_FLSH$=CHR$136:T_STDY$=CHR$137:C_SGL$=CHR$140:C_DBL$=CHR$141:C_CONCEAL$=CHR$152:C_CONTIG$=CHR$153:C_SEP$=CHR$154:C_BKBKL$=CHR$156:C_BKNEW$=CHR$157:C_HOLD$=CHR$158:C_RLSE$=CHR$159: REM Control
+2 T_R$=CHR$129:T_G$=CHR$130:T_Y$=CHR$131:T_B$=CHR$132:T_M$=CHR$133:T_C$=CHR$134:T_W$=CHR$135:REM Alphanumeric
+3 C_FLSH$=CHR$136:C_STDY$=CHR$137:C_SGL$=CHR$140:C_DBL$=CHR$141:C_CONCEAL$=CHR$152:C_CONTIG$=CHR$153:C_SEP$=CHR$154:C_BGBLK$=CHR$156:C_BGNEW$=CHR$157:C_HOLD$=CHR$158:C_RLSE$=CHR$159: REM Control
 11 G_R$=CHR$145:G_G$=CHR$146:G_Y$=CHR$147:G_B$=CHR$148:G_M$=CHR$149:G_C$=CHR$150:G_W$=CHR$151: REM Graphics
 ```
 
-In `MODE 7` when pasting underscore into BeebEm, the undercore is represented by a dash or minus. But in `MODE 0` the underscore is presented correctly. I discovered this after trying the code from [ASCII art on the Beeb](https://stardot.org.uk/forums/viewtopic.php?t=17317)
+To use, lines 7 and 8 above become,
+
+```none
+7 FG$=T_B$:FT$=G_B$:BG$=G_Y$:GC$=T_W$:SR$=T_R$:SG$=T_G$:SGG$=G_G$: REM COLOUR VARIABLES
+8 BK$=C_BGNEW$:LB$=CHR$181:RB$=CHR$234:FB$=CHR$255:LG$=C_DBL$:FLSH$=C_FLSH$:STDY$=C_STDY$: REM COLOUR CONSTANTS - DO NOT CHANGE
+```
+which is much easier to read! 
+
+Really, line 8 is now superluous, apart from the blocks: `LB$`, `RB$` and `FB$`.
+
+This new list of string variables not only makes it easier to read, but also allows us to add a layer of abastraction, such that UI elements can be grouped and have their colours changed independantly, as well as globally.
+
+#### Change line numbers
+
+It is becoming a rather tight fit for all of the new colour and graphics control string variables to be declared around line 7.
+
+As line 8 has become redundant, the best option, move the *complete* line 7 (see **Other adjustable areas of colour** below) to line 19, the block characters to line 18, and use lines 15-17 for the three line solution of the new comprehensive list of variable "constants".
+
+Line 7 differs from the above *example(s)*, as it has added the colour strings for heading, stats, market princes, and messages.
+
+Also, changing line 7, or rather line 19, to use the new named variables, instead of the `CHR$`:
+
+```none
+15 T_R$=CHR$129:T_G$=CHR$130:T_Y$=CHR$131:T_B$=CHR$132:T_M$=CHR$133:T_C$=CHR$134:T_W$=CHR$135:REM Alphanumeric - DO NOT CHANGE
+16 C_FLSH$=CHR$136:C_STDY$=CHR$137:C_SGL$=CHR$140:C_DBL$=CHR$141:C_CONCEAL$=CHR$152:C_CONTIG$=CHR$153:C_SEP$=CHR$154:C_BGBLK$=CHR$156:C_BGNEW$=CHR$157:C_HOLD$=CHR$158:C_RLSE$=CHR$159: REM Control - DO NOT CHANGE
+17 G_R$=CHR$145:G_G$=CHR$146:G_Y$=CHR$147:G_B$=CHR$148:G_M$=CHR$149:G_C$=CHR$150:G_W$=CHR$151: REM Graphics - DO NOT CHANGE
+18 BK$=CHR$157:LB$=CHR$181:RB$=CHR$234:FB$=CHR$255 : REM COLOUR CONSTANTS - DO NOT CHANGE
+19 FG$=G_G$:FT$=T_G$:BG$=G_G$:GC$=T_W$:HC$=G_B$:SC$=G_G$:PC$=G_G$:MC$=G_G$:SR$=T_R$:SG$=T_G$:SGG$=G_G$: REM COLOUR VARIABLES
+```
+
+However, as the variable names declared in line 8 have now been removed, this *does* require that some variable names are changed in the code. Lines 
+
+```none
+20 PRINT TAB(0,3)SGG$;:FOR N=1 TO 37: PRINT FB$;: NEXT N: PRINT FB$:PRINT: PRINT TAB(12)C_DBL$SG$ "T A I P A N:":PRINT TAB(12)C_DBL$SG$ "T A I P A N:": PRINT TAB(12)SG$"_________________"
+
+590 PRINT TAB(6,14)SG$"PRESS <";:PRINT C_FLSH$"SPACEBAR"C_STDY$;:PRINT "> TO START";SGG$ : GOSUB 60:IF X$ = " " THEN RETURN
+```
+
+Plus a ***lot*** of occurence of `BK$` (30). Also, as the new variable name is rather much longer than the original, `BK$=C_BGNEW$`, it would seem expedient to maintain it as just `BK`, and add `BK$=C_BGNEW$` to line 18.
+
+##### Final colour declartions
+
+```none
+15 T_R$=CHR$129:T_G$=CHR$130:T_Y$=CHR$131:T_B$=CHR$132:T_M$=CHR$133:T_C$=CHR$134:T_W$=CHR$135:REM Alphanumeric - DO NOT CHANGE
+16 C_FLSH$=CHR$136:C_STDY$=CHR$137:C_SGL$=CHR$140:C_DBL$=CHR$141:C_CONCEAL$=CHR$152:C_CONTIG$=CHR$153:C_SEP$=CHR$154:C_BGBLK$=CHR$156:C_BGNEW$=CHR$157:C_HOLD$=CHR$158:C_RLSE$=CHR$159: REM Control - DO NOT CHANGE
+17 G_R$=CHR$145:G_G$=CHR$146:G_Y$=CHR$147:G_B$=CHR$148:G_M$=CHR$149:G_C$=CHR$150:G_W$=CHR$151: REM Graphics - DO NOT CHANGE
+18 LB$=CHR$181:RB$=CHR$234:FB$=CHR$255:BK$=C_BGNEW$ : REM COLOUR AND GRAPHICS CONSTANTS - DO NOT CHANGE
+19 FG$=G_G$:FT$=T_G$:BG$=G_G$:GC$=T_W$:HC$=G_B$:SC$=G_G$:PC$=G_G$:MC$=G_G$:SR$=T_R$:SG$=T_G$:SGG$=G_G$: REM COLOUR VARIABLES
+```
+
+
+
+#### Note on underscore
+
+
+Note: In `MODE 7` when pasting underscore into BeebEm, the undercore is represented by a dash or minus. But in `MODE 0` the underscore is presented correctly. I discovered this after trying the code from [ASCII art on the Beeb](https://stardot.org.uk/forums/viewtopic.php?t=17317)
 
 Test:
 
@@ -2078,182 +2314,21 @@ Test:
 20 PRINT T_R$
 ```
 
-Paste the above code in `MODE 7`, `LIST` and the underscore is a dash. Now, change to `MODE 0` and then re-`LIST`. The underscore is shown correctly.
+Process:
 
+1. Using BeebEm, paste the above code in `MODE 7`:
 
+    ```none
+    10 T_R$="HI"
+    20 PRINT T_R$
+    ```
+    
+2. Enter `LIST` 
+3. The underscore is shwon as a dash
+4. Now, change to `MODE 0` 
+5. Re-`LIST`. 
+6. The underscore is shown correctly
 
-### Complete colour patch for goods table and market prices
-
-With first line empty (as per Apple II)
-
-#### Without center bar
-
-##### Hardcoded colours
-
-```none
-141 PRINT TAB(0,3);CHR$147;CHR$(157);CHR$(148);"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
-
-150 FORI=0TO5:P.TAB(0,4+I);CHR$147;CHR$181:P.TAB(2,4+I);CHR$135;G$(I):P.TAB(9,4+I);CHR$147;CHR$181;CHR$135:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
-151 P.TAB(22,4+I);CHR$147;CHR$181;CHR$135:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I);CHR$147;CHR$234:NEXTI
-152 P.TAB(0,10);CHR$147;CHR$(157);CHR$(132);A$:RETURN
-
-220 GOSUB 790: GOSUB 1340: P.TAB(0,10);CHR$147;CHR$(157);CHR$(148);TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)CHR$147;CHR$181;CHR$135;G$(I);: P.TAB(8)CHR$135:P.TAB(9,12+I/2)GP(I);:P.TAB(20,12+I/2);G$(I + 1);
-221 PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2);CHR$147;CHR$234:NEXT I
-222 P.TAB(0,15);CHR$147;CHR$(157);CHR$(132);A$
-223 PRINT TAB(0,11);CHR$147;CHR$181: PRINT TAB(38,11);CHR$147;CHR$234
-```
-
-##### Adjustable
-
-Key - set in lines 7 and 8
-
-```none
-FG=132 CHR$(132) -> CHR$FG    - Foreground graphics colour
-FT=148 CHR$(148) -> CHR$FT    - Foreground text colour
-BG=147 CHR$147   -> CHR$BG    - Background colour
-BK=157 CHR$(157) -> CHR$BK    - Background control (Do NOT change!)
-GC=135 CHR$135   -> CHR$GC    - Goods colour (white)
-LB=181 CHR$181 -> CHR$LB      - Left half block
-RB=234 CHR$234 -> CHR$RB      - Right half block
-FB=255 CHR$255 -> CHR$FB      - Full block
-```
-
-Code
-
-```none
-7 FG=132:FT=148:BG=147:GC=135 : REM COLOUR VARIABLES
-8 BK=157:LB=181:RB=234:FB=255: REM COLOUR CONSTANTS - DO NOT CHANGE
-141 PRINT TAB(0,3);CHR$BG;CHR$BK;CHR$FT;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
-
-150 FORI=0TO5:P.TAB(0,4+I);CHR$BG;CHR$LB:P.TAB(2,4+I);CHR$GC;G$(I):P.TAB(9,4+I);CHR$BG;CHR$LB;CHR$GC:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
-151 P.TAB(22,4+I);CHR$BG;CHR$LB;CHR$GC:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I);CHR$BG;CHR$RB:NEXTI
-152 P.TAB(0,10);CHR$BG;CHR$BK;CHR$FG;A$:RETURN
-
-220 GOSUB 790: GOSUB 1340: P.TAB(0,10);CHR$BG;CHR$BK;CHR$FT;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)CHR$BG;CHR$LB;CHR$GC;G$(I);: P.TAB(8)CHR$GC:P.TAB(9,12+I/2)GP(I);:P.TAB(20,12+I/2);G$(I + 1);
-221 PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2);CHR$BG;CHR$RB:NEXT I
-222 P.TAB(0,15);CHR$BG;CHR$BK;CHR$FG;A$
-223 PRINT TAB(0,11);CHR$BG;CHR$LB: PRINT TAB(38,11);CHR$BG;CHR$RB
-```
-
-##### Adjustable - more efficient
-
-Key - set in lines 7 and 8
-
-```none
-FG$= CHR$(132) - Foreground graphics colour
-FT$= CHR$(148) - Foreground text colour
-BG$= CHR$147   - Background colour
-BK$= CHR$(157) - Background control (Do NOT change!)
-GC$= CHR$135   - Goods colour (white)
-LB$= CHR$181   - Left half block
-RB$= CHR$234   - Right half block
-FB$= CHR$255   - Full block
-```
-
-Code
-
-```none
-7 FG$=CHR$132:FT$=CHR$148:BG$=CHR$147:GC$=CHR$135 : REM COLOUR VARIABLES
-8 BK$=CHR$157:LB$=CHR$181:RB$=CHR$234:FB$=CHR$255: REM COLOUR CONSTANTS - DO NOT CHANGE
-141 PRINT TAB(0,3)BG$BK$FT$;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
-
-150 FORI=0TO5:P.TAB(0,4+I)BG$LB$:P.TAB(2,4+I)GC$;G$(I):P.TAB(9,4+I)BG$LB$GC$:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
-151 P.TAB(22,4+I)BG$LB$GC$:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I)BG$RB$:NEXTI
-152 P.TAB(0,10)BG$BK$FG$;A$:RETURN
-
-220 GOSUB 790: GOSUB 1340: P.TAB(0,10)BG$BK$FT$;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)BG$LB$GC$G$(I);: P.TAB(8)GC$:P.TAB(9,12+I/2)GP(I);:P.TAB(20,12+I/2);G$(I + 1);
-221 PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2)BG$RB$:NEXT I
-222 P.TAB(0,15)BG$BK$FG$A$
-223 PRINT TAB(0,11)BG$LB$: PRINT TAB(38,11)BG$RB$
-```
-
-#### With center bar
-
-##### Hardcoded colours
-
-```none
-141 PRINT TAB(0,3);CHR$147;CHR$(157);CHR$(148);"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
-
-150 FORI=0TO5:P.TAB(0,4+I);CHR$147;CHR$181:P.TAB(2,4+I);CHR$135;G$(I):P.TAB(9,4+I);CHR$147;CHR$181;CHR$135:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
-151 P.TAB(22,4+I);CHR$147;CHR$181;CHR$135:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I);CHR$147;CHR$234:NEXTI
-152 P.TAB(0,10);CHR$147;CHR$(157);CHR$(132);A$:RETURN
-
-220 GOSUB 790: GOSUB 1340: P.TAB(0,10);CHR$147;CHR$(157);CHR$(148);TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)CHR$147;CHR$181;CHR$135;G$(I);: P.TAB(8)CHR$135:P.TAB(9,12+I/2)GP(I);
-221 P.TAB(20,12+I/2)CHR$147;CHR$181;CHR$135;G$(I + 1);:PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2);CHR$147;CHR$234:NEXT I
-222 P.TAB(0,15);CHR$147;CHR$(157);CHR$(132);A$
-223 PRINT TAB(0,11);CHR$147;CHR$181;TAB(21);CHR$181; TAB(39);CHR$234
-```
-
-##### Adjustable
-
-Key - set in lines 7 and 8
-
-```none
-FG=132 CHR$(132) -> CHR$FG    - Foreground graphics colour
-FT=148 CHR$(148) -> CHR$FT    - Foreground text colour
-BG=147 CHR$147   -> CHR$BG    - Background colour
-BK=157 CHR$(157) -> CHR$BK    - Background control (Do NOT change!)
-GC=135 CHR$135   -> CHR$GC    - Goods colour (white)
-LB=181 CHR$181 -> CHR$LB      - Left half block
-RB=234 CHR$234 -> CHR$RB      - Right half block
-FB=255 CHR$255 -> CHR$FB      - Full block
-```
-
-Code
-
-```none
-7 FG=132:FT=148:BG=147:GC=135 : REM COLOUR VARIABLES
-8 BK=157:LB=181:RB=234:FB=255: REM COLOUR CONSTANTS - DO NOT CHANGE
-141 PRINT TAB(0,3);CHR$BG;CHR$BK;CHR$FT;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
-
-150 FORI=0TO5:P.TAB(0,4+I);CHR$BG;CHR$LB:P.TAB(2,4+I);CHR$GC;G$(I):P.TAB(9,4+I);CHR$BG;CHR$LB;CHR$GC:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
-151 P.TAB(22,4+I);CHR$BG;CHR$LB;CHR$GC:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I);CHR$BG;CHR$RB:NEXTI
-152 P.TAB(0,10);CHR$BG;CHR$BK;CHR$FG;A$:RETURN
-
-220 GOSUB 790: GOSUB 1340: P.TAB(0,10);CHR$BG;CHR$BK;CHR$FT;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)CHR$BG;CHR$LB;CHR$GC;G$(I);: P.TAB(8)CHR$GC:P.TAB(9,12+I/2)GP(I);
-221 P.TAB(20,12+I/2)CHR$BG;CHR$LB;CHR$GC;G$(I + 1);:PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2);CHR$BG;CHR$RB:NEXT I
-222 P.TAB(0,15);CHR$BG;CHR$BK;CHR$FG;A$
-223 PRINT TAB(0,11);CHR$BG;CHR$LB;TAB(21);CHR$LB; TAB(39);CHR$RB
-```
-
-##### Adjustable - more efficient
-
-Key - set in lines 7 and 8
-
-```none
-FG$= CHR$(132) - Foreground graphics colour
-FT$= CHR$(148) - Foreground text colour
-BG$= CHR$147   - Background colour
-BK$= CHR$(157) - Background control (Do NOT change!)
-GC$= CHR$135   - Goods colour (white)
-LB$= CHR$181   - Left half block
-RB$= CHR$234   - Right half block
-FB$= CHR$255   - Full block
-```
-
-Code
-
-```none
-7 FG$=CHR$132:FT$=CHR$148:BG$=CHR$147:GC$=CHR$135 : REM COLOUR VARIABLES
-8 BK$=CHR$157:LB$=CHR$181:RB$=CHR$234:FB$=CHR$255: REM COLOUR CONSTANTS - DO NOT CHANGE
-141 PRINT TAB(0,3)BG$BK$FT$;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
-
-150 FORI=0TO5:P.TAB(0,4+I)BG$LB$:P.TAB(2,4+I);GC$;G$(I):P.TAB(9,4+I)BG$LB$GC$:P.TAB(12,4+I);: Q=SG(I):GOSUB 1330
-151 P.TAB(22,4+I)BG$LB$GC$:P.TAB(27,4+I);:Q=GG(I):GOSUB 1330:P.TAB(38,4+I)BG$RB$:NEXTI
-152 P.TAB(0,10)BG$BK$FG$;A$:RETURN
-
-220 GOSUB 790: GOSUB 1340: P.TAB(0,10)BG$BK$FT$;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)BG$LB$GC$;G$(I);: P.TAB(8)GC$:P.TAB(9,12+I/2)GP(I);
-221 P.TAB(20,12+I/2)BG$LB$GC$;G$(I + 1);:PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2)BG$RB$:NEXT I
-222 P.TAB(0,15)BG$BK$FG$;A$
-223 PRINT TAB(0,11)BG$LB$;TAB(21)LB$; TAB(39)RB$
-```
-
-```
-220 GOSUB 790: GOSUB 1340: P.TAB(0,10)BG$BK$FT$;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)BG$LB$GC$G$(I);: P.TAB(8)GC$:P.TAB(9,12+I/2)GP(I);:P.TAB(20,12+I/2);G$(I + 1);
-221 PRINT TAB(18) GP(I + 1) :P.TAB(38,12+I/2)BG$RB$:NEXT I
-222 P.TAB(0,15)BG$BK$FG$A$
-223 PRINT TAB(0,11)BG$LB$: PRINT TAB(38,11)BG$RB$
-```
 
 ### Complete green monochrome patch for goods table and market prices
 
@@ -2277,13 +2352,17 @@ FB$= CHR$255   - Full block
 HC$= CHR$148   - Heading text colour
 ```
 
-Code
+Code for the goods and market prices tables
 
 ```none
-7 FG$=CHR$146:FT$=CHR$130:BG$=CHR$146:GC$=CHR$135:SR$=CHR$(129):SG$=CHR$(130):SGG$=CHR$(146): REM COLOUR VARIABLES
-8 BK$=CHR$157:LB$=CHR$181:RB$=CHR$234:FB$=CHR$255:LG$=CHR$(141):FLSH$=CHR$(136):STDY$=CHR$(137): REM COLOUR CONSTANTS - DO NOT CHANGE
+15 T_R$=CHR$129:T_G$=CHR$130:T_Y$=CHR$131:T_B$=CHR$132:T_M$=CHR$133:T_C$=CHR$134:T_W$=CHR$135:REM Alphanumeric - DO NOT CHANGE
+16 C_FLSH$=CHR$136:C_STDY$=CHR$137:C_SGL$=CHR$140:C_DBL$=CHR$141:C_CONCEAL$=CHR$152:C_CONTIG$=CHR$153:C_SEP$=CHR$154:C_BGBLK$=CHR$156:C_BGNEW$=CHR$157:C_HOLD$=CHR$158:C_RLSE$=CHR$159: REM Control - DO NOT CHANGE
+17 G_R$=CHR$145:G_G$=CHR$146:G_Y$=CHR$147:G_B$=CHR$148:G_M$=CHR$149:G_C$=CHR$150:G_W$=CHR$151: REM Graphics - DO NOT CHANGE
+18 LB$=CHR$181:RB$=CHR$234:FB$=CHR$255:BK$=C_BGNEW$ : REM COLOUR AND GRAPHICS CONSTANTS - DO NOT CHANGE
+19 FG$=CHR$146:FT$=CHR$130:BG$=CHR$146:GC$=CHR$135:SR$=CHR$(129):SG$=CHR$(130):SGG$=CHR$(146): REM COLOUR VARIABLES
 
-20 PRINT TAB(0,3)SGG$;:FOR N=1 TO 37: PRINT FB$;: NEXT N: PRINT FB$:PRINT: PRINT TAB(12)LG$SG$ "T A I P A N:":PRINT TAB(12)LG$SG$ "T A I P A N:": PRINT TAB(12)SG$"_________________"
+20 PRINT TAB(0,3)SGG$;:FOR N=1 TO 37: PRINT FB$;: NEXT N: PRINT FB$:PRINT: PRINT TAB(12)C_DBL$SG$ "T A I P A N:":PRINT TAB(12)C_DBL$SG$ "T A I P A N:": PRINT TAB(12)SG$"_________________"
+
 21 SPEED = 100:PRINT TAB(13,8)SG$"A  G A M E  I N":PRINT TAB(14)SG$"C O N T E X T": PRINT:PRINT TAB(13)SG$"HAYDEN BOOK CO."
 22 SPEED = 255:PRINT TAB(0,14)SGG$;:FOR N=1 TO 37: PRINT FB$;: NEXT N: PRINT FB$
 
@@ -2298,14 +2377,13 @@ Code
 222 P.TAB(0,15)BG$BK$FG$;A$
 223 PRINT TAB(0,11)BG$LB$;TAB(21)LB$; TAB(39)RB$
 
-590 PRINT TAB(6,14)SG$"PRESS <";:FLASH=1:PRINT FLSH$"SPACEBAR"STDY$;:NORMAL=1:PRINT "> TO START";SGG$ : GOSUB 60:IF X$ = " " THEN RETURN
+590 PRINT TAB(6,14)SG$"PRESS <";:PRINT C_FLSH$"SPACEBAR"C_STDY$;:PRINT "> TO START";SGG$ : GOSUB 60:IF X$ = " " THEN RETURN
 ```
 
-and the indents
+and the indents for the stats, messages, lender, menus, etc..
 
 ```none
-7 FG$=CHR$146:FT$=CHR$130:BG$=CHR$146:GC$=CHR$135:SR$=CHR$(129):SG$=CHR$(130):SGG$=CHR$(146): REM COLOUR VARIABLES
-8 BK$=CHR$157:LB$=CHR$181:RB$=CHR$234:FB$=CHR$255:LG$=CHR$(141):FLSH$=CHR$(136):STDY$=CHR$(137): REM COLOUR CONSTANTS - DO NOT CHANGE
+19 FG$=CHR$146:FT$=CHR$130:BG$=CHR$146:GC$=CHR$135:SR$=CHR$(129):SG$=CHR$(130):SGG$=CHR$(146): REM COLOUR VARIABLES
 
 130 VDU12:PRINT TAB(0,0)FT$"PORT ";L$(L);: PRINT TAB(27,0);M$(M);". ";DA+1;",";Y
 140 INVERSE=0:PRINT TAB(0,1)FT$"CASH ";: Q = C:GOSUB 1330:NORMAL=0:PRINT TAB(27,1); "GUNS ";:Q=G:GOSUB 1330: PRINT TAB(0,2)FT$"DEBT ";: Q = D:GOSUB 1330:PRINT TAB(27,2); "HOLD ";: Q = SH:GOSUB 1330
@@ -2343,14 +2421,50 @@ It becomes apparent that the heading colour, which is blue, and is only ever pri
 Fortunately, only three lines need to be changed:
 
 ```none
-7 FG$=CHR$146:FT$=CHR$130:BG$=CHR$146:GC$=CHR$135:HC$=CHR$148:SR$=CHR$(129):SG$=CHR$(130):SGG$=CHR$(146): REM COLOUR VARIABLES
+19 FG$=CHR$146:FT$=CHR$130:BG$=CHR$146:GC$=CHR$135:HC$=CHR$148:SR$=CHR$(129):SG$=CHR$(130):SGG$=CHR$(146): REM COLOUR VARIABLES
 141 PRINT TAB(0,3)BG$BK$HC$;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
 220 GOSUB 790: GOSUB 1340: P.TAB(0,10)BG$BK$HC$;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)BG$LB$GC$;G$(I);: P.TAB(8)GC$:P.TAB(9,12+I/2)GP(I);
 ```
 
 [![BBCTaipan_MODE7_Monochrome_VisibleHeadings][1351]][1351]
 
+The new `HC$` (heading colour) should always be used in conjunction with the `BG$` (background colour). You could even have them different colours from the bars/columns and the main text..! Gaudy.
+
 The goods colour is still white – just change `GC$` from `135` to `130`.
+
+#### Other adjustable areas of colour
+
+##### 
+
+Key - set in lines 7 and 8
+
+```none
+FG$= CHR$132   - Foreground graphics colour
+FT$= CHR$148   - Foreground text colour
+BG$= CHR$147   - Background colour
+BK$= CHR$157   - Background control (Do NOT change!)
+GC$= CHR$135   - Goods colour (white)
+LB$= CHR$181   - Left half block
+RB$= CHR$234   - Right half block
+FB$= CHR$255   - Full block
+HC$= CHR$148   - Heading text colour
+
+SC$= CHR$132   - Stats colour
+PC$= CHR$132   - Market prices colour
+MC$= CHR$132   - Messages colour
+```
+
+Changing code, just the variable names: `FT$`-> `SC$` and `GC$` -> `PC$`
+
+```none
+19 FG$=CHR$146:FT$=CHR$130:BG$=CHR$146:GC$=CHR$135:HC$=CHR$148:SC$=CHR$146:PC$=CHR$146:MC$=CHR$146:SR$=CHR$129:SG$=CHR$130:SGG$=CHR$146: REM COLOUR VARIABLES
+
+130 VDU12:PRINT TAB(0,0)SC$"PORT ";L$(L);: PRINT TAB(27,0);M$(M);". ";DA+1;",";Y
+140 INVERSE=0:PRINT TAB(0,1)SC$"CASH ";: Q = C:GOSUB 1330:NORMAL=0:PRINT TAB(27,1); "GUNS ";:Q=G:GOSUB 1330: PRINT TAB(0,2)SC$"DEBT ";: Q = D:GOSUB 1330:PRINT TAB(27,2); "HOLD ";: Q = SH:GOSUB 1330
+
+141 PRINT TAB(0,3)BG$BK$HC$;"GOODS"; TAB(10,3);"ABOARD";TAB(17,3);"SHIP";TAB(24,3);"HONGKONG";TAB(33,3);"GODOWN"
+220 GOSUB 790: GOSUB 1340: P.TAB(0,10)BG$BK$HC$;TAB(8,10);L$(L);" MARKET PRICES":P.A$:FORI=0TO4STEP2: P.TAB(0,12+I/2)BG$LB$PC$;G$(I);: P.TAB(8)PC$:P.TAB(9,12+I/2)GP(I);
+```
 
 ---
 
@@ -2383,7 +2497,13 @@ Out of the two options, I prefer the colour tables as they *seem* less "jarring"
 
 [![BBCTaipan_MODE7_ColourMarketTableBottom_MiddleBar_Good][1097]][1097]
 
+### Take aways
 
+ - You don't need to use `;` everywhere, just string the strings together, just by name: `A$B%"o"D$` - RAM saver!
+ - Use string variables to hold the entire control code, including the `CHR$`, i.e. `G_RED$=CHR$(145)` - RAM saver!
+ - You have to add `CHR$` anyway, so always use a variable instead, and by using different variable names you can easily globally colour different parts of the UI independantly.
+ - No brackets are needed, `CHR$114`, not `CHR$(114)` - RAM saver!
+ - Embrace the 39 columns and unwanted spaces littered along the line, and plan/design for both.
 
 
 This is the end, my friend
@@ -2538,11 +2658,14 @@ This is the end, my friend
  - Why multiple lines 141? Was it development of the colour UI? Yes, see **Using colour (blue on yellow) again**. Still present in **Final complete colour patch for goods table - Blue on yellow**. Search for `REM remove:`
  - Why multiple lines 221? See **#### Top line – empty or shift?**. Was it development of the colour UI? Yes, see **Using colour (blue on yellow) again**. 
 
-  - Use pre-greening (control coharacters down the left sid eof the screen, technique from video. Make it a subroutine.
-    - By pre-greening, everything will be indented. However, the `TAB` statement would need to change to avoid overwriting the control character at `TAB(0)`
-  - Every string printed should be preceded by a string varaiable. That way the colour can be changed globally. This can be done for, and then derived from, the green monochrome verison.
-    - However, if every `PRINT` is preficed with a string variable, then the `TAB` value can remain unchanged - easier!
-  - MAke a PRINT AT, or LOCATE routine for PET
+ - Use pre-greening (control coharacters down the left sid eof the screen, technique from video. Make it a subroutine.
+   - By pre-greening, everything will be indented. However, the `TAB` statement would need to change to avoid overwriting the control character at `TAB(0)`
+ - Every string printed should be preceded by a string varaiable. That way the colour can be changed globally. This can be done for, and then derived from, the green monochrome verison.
+   - However, if every `PRINT` is prefixed with a string variable, then the `TAB` value can remain unchanged - easier!
+ - Add new colour blocks(???): stats (`SC$`); messages (`MC$`); market prices ((`PC$`) - DONE!
+ - Check justification of goods - is there a dodgy semicolon?
+ - `MAXINT`!!!!
+ - Make a PRINT AT, or LOCATE routine for PET
 
 
 ### More TODO 
